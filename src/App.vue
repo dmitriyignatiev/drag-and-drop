@@ -1,26 +1,23 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <MyComp />
+    <Drag />
+    <Tes />
+  </div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import MyComp from "./components/MyComp";
+  import Drag from "./components/Drag";
+  import Tes from "./components/Tes";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  export default {
+    name: "App",
+    components: {MyComp, Drag, Tes},
+    data() {
+      return {
+        value: "",
+      };
+    },
+    methods: {},
+  };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
