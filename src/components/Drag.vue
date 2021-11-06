@@ -16,6 +16,7 @@
             item-key="id"
             @change="dragChange"
             :move="move"
+            @end="end"
             data-list-id="1"
           >
             <template #item="{ element }">
@@ -40,6 +41,7 @@
             item-key="id"
             @change="dragChange"
             :move="move"
+            @end="end"
             @added="added"
             data-list-id="2"
           >
@@ -304,13 +306,29 @@ export default defineComponent({
       this.controlOnStart = originalEvent.ctrlKey;
     },
     move(evt, originalEvent) {
-        const sourceList = evt.draggedContext.element.list;
-        const targetList = evt.relatedContext.element.list;
-
-        this["list"+ sourceList].splice(evt.draggedContext.index,1, {...evt.draggedContext.element, list: targetList});
-
-        console.log("Moving from :::", evt.draggedContext, evt.relatedContext);
       console.log("move1", evt, originalEvent);
+    },
+    end(evt) {
+      console.log("END::::", evt);
+      const targetList = "list" + evt.to.dataset.listId;
+      
+      console.log(
+        "BEFORE:::",
+        this[targetList],
+        evt.newIndex
+      );
+
+      this[targetList].splice(evt.newIndex, 1, {
+        ...evt.item.__draggable_context.element,
+        list: evt.to.dataset.listId,
+      });
+
+
+      console.log(
+        "AFTER:::",
+        this[targetList]
+      );
+
     },
     dragChange(evt) {
       console.log("Change!!!!", evt, this.list1, this.list2);
