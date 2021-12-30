@@ -158,6 +158,10 @@ export default defineComponent({
   },
   data() {
     return {
+        sourceList: null,
+        targetList: null,
+
+
       list1: [
         {
           name: "USER1",
@@ -295,8 +299,8 @@ export default defineComponent({
       console.log("clone", name, id, list, idGlobal++);
       return { name, id: id, list, uuid, globalId: idGlobal };
     },
-    pullFunction(item) {
-      console.log("pullIs", item);
+    pullFunction() {
+      // console.log("pullIs", item);
       return this.controlOnStart ? "clone" : true;
     },
     start({ originalEvent }) {
@@ -304,19 +308,50 @@ export default defineComponent({
       this.controlOnStart = originalEvent.ctrlKey;
     },
     move(evt, originalEvent) {
-        const sourceList = evt.draggedContext.element.list;
-        const targetList = evt.relatedContext.element.list;
 
-        this["list"+ sourceList].splice(evt.draggedContext.index,1, {...evt.draggedContext.element, list: targetList});
+        try{
+            this.sourceList = evt.draggedContext.element.list;
+            this.targetList = evt.relatedContext.element.list;
 
-        console.log("Moving from :::", evt.draggedContext, evt.relatedContext);
-      console.log("move1", evt, originalEvent);
+            // this["list"+ sourceList].splice(evt.draggedContext.index,1, {...evt.draggedContext.element, list: targetList});
+
+
+            console.log("Moving from :::", evt.draggedContext, evt.relatedContext);
+            console.log("move1", evt, originalEvent);
+            console.log('sourceList', this.sourceList)
+            console.log('targetList', this.targetList)
+        }
+        catch(e){
+            console.log('Error', e)
+        }
+
+
+
     },
     dragChange(evt) {
-      console.log("Change!!!!", evt, this.list1, this.list2);
+      console.log("FIRST Change!!!!", evt, this.list1, this.list2);
+      if(evt?.added){
+          console.log('Added', evt)
+          // определяем uuid - надо будет сверится после того как найдем sort
+          // const id = evt.added.element.uuid
+          // опрелеляем sort
+          // const sort = evt.added.element.sort
+          // убираем из sourceList элемент по id
+
+
+
+      }
+      if(evt?.removed){
+          console.log('Remove', evt)
+      }
+      if(evt?.moved){
+          console.log('Moved', evt)
+      }
+
+
     },
     tryMethos() {
-      console.log("dsds");
+      console.log("dsfrefs");
     }
   }
 });
