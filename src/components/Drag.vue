@@ -160,6 +160,9 @@ export default defineComponent({
     return {
         sourceList: null,
         targetList: null,
+        oldStateList: null,
+        idWork: null,
+
 
 
       list1: [
@@ -167,43 +170,68 @@ export default defineComponent({
           name: "USER1",
           sort: 1,
           id: 1,
-          list: 1,
+          stage: 1,
           uuid: "ffcc4608-3b1b-11ec-8d3d-0242ac130003"
         },
         {
           name: "USER2",
             sort: 2,
           id: 2,
-          list: 1,
+            stage: 1,
           uuid: "0649fe6c-3b1c-11ec-8d3d-0242ac130003"
         },
         {
           name: "USER3",
             sort:3,
           id: 3,
-          list: 1,
+            stage: 1,
           uuid: "0e81b8e0-3b1c-11ec-8d3d-0242ac130003"
-        }
+        },
+          {
+              name: "USER11",
+              sort: 4,
+              id: 4,
+              stage: 1,
+              uuid: "ffcc4608-3b1b-11ec-8d3d-0242ac130003"
+          },
+          {
+              name: "USER22",
+              sort: 5,
+              id: 5,
+              stage: 1,
+              uuid: "0649fe6c-3b1c-11ec-8d3d-0242ac130003"
+          },
+          {
+              name: "USER66",
+              sort:6,
+              id: 6,
+              stage: 1,
+              uuid: "0e81b8e0-3b1c-11ec-8d3d-0242ac130003"
+          },
+
+
       ],
       list2: [
         {
-          name: "USER4", sort:4,
+          name: "USER4",
+            sort: 1,
           id: 5,
-          list: 2,
+            stage: 2,
+
           uuid: "15314048-3b1c-11ec-8d3d-0242ac130003"
         },
         {
           name: "USER5",
-            sort:5,
+            sort:2,
           id: 6,
-          list: 2,
+            stage: 2,
           uuid: "1a4df63e-3b1c-11ec-8d3d-0242ac130003"
         },
         {
           name: "USER6",
-            sort: 6,
+            sort: 3,
           id: 7,
-          list: 2,
+            stage: 2,
           uuid: "20ac6baa-3b1c-11ec-8d3d-0242ac130003"
         }
       ],
@@ -295,23 +323,23 @@ export default defineComponent({
   },
 
   methods: {
-    clone({ name, id, uuid, list }) {
-      console.log("clone", name, id, list, idGlobal++);
-      return { name, id: id, list, uuid, globalId: idGlobal };
+    clone({ name, id, uuid, sort , stage,  }) {
+      console.log("CLONE", name, id, stage, idGlobal++);
+      return { name, sort, id: id,  stage,  uuid,  globalId: idGlobal };
     },
     pullFunction() {
       // console.log("pullIs", item);
       return this.controlOnStart ? "clone" : true;
     },
     start({ originalEvent }) {
-      console.log("start");
+      console.log("start", this.sourceList, this.targetList);
       this.controlOnStart = originalEvent.ctrlKey;
     },
     move(evt, originalEvent) {
 
         try{
-            this.sourceList = evt.draggedContext.element.list;
-            this.targetList = evt.relatedContext.element.list;
+            this.sourceList = evt.draggedContext.element.stage;
+            this.targetList = evt.relatedContext.element.stage;
 
             // this["list"+ sourceList].splice(evt.draggedContext.index,1, {...evt.draggedContext.element, list: targetList});
 
@@ -328,7 +356,7 @@ export default defineComponent({
 
 
     },
-    dragChange(evt) {
+    dragChange(evt,  ) {
       console.log("FIRST Change!!!!", evt, this.list1, this.list2);
       if(evt?.added){
           console.log('Added', evt)
@@ -337,15 +365,42 @@ export default defineComponent({
           // опрелеляем sort
           // const sort = evt.added.element.sort
           // убираем из sourceList элемент по id
+          this["list"+this.targetList].map((item, index) => {
+              console.log('Item', item, index+1)
+              if(item.index !== index+1); item.sort=index+1; item.stage=this.targetList
 
+          })
+          console.log('finally Added', this["list"+this.targetList])
 
 
       }
       if(evt?.removed){
           console.log('Remove', evt)
+          console.log('Evt', this.list1)
+          this["list"+this.sourceList].map((item, index) => {
+              console.log('Item', item, index+1)
+              if(item.index !== index+1); item.sort=index+1
+
+          })
+
+          console.log('finally Removed', this["list"+this.sourceList])
+
+
       }
       if(evt?.moved){
           console.log('Moved', evt)
+          const oldIndex = evt.moved.oldIndex
+          const newIndex = evt.moved.newIndex
+          console.log('LOGS', oldIndex, newIndex)
+          console.log('Evt', this.list1)
+          this["list"+this.sourceList].map((item, index) => {
+              console.log('Item', item, index+1)
+              if(item.index !== index+1); item.sort=index+1
+          })
+          // changeRange
+          console.log('finally', this["list"+this.sourceList])
+
+
       }
 
 
