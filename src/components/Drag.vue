@@ -162,6 +162,7 @@ export default defineComponent({
         targetList: null,
         oldStateList: null,
         idWork: null,
+        stack: [],
 
 
 
@@ -367,10 +368,15 @@ export default defineComponent({
           // убираем из sourceList элемент по id
           this["list"+this.targetList].map((item, index) => {
               console.log('Item', item, index+1)
-              if(item.index !== index+1); item.sort=index+1; item.stage=this.targetList
+              if(item.index !== index+1){
+                  item.sort=index+1;
+                  item.stage=this.targetList
+                  item.stack.push(item.id)
+              }
 
           })
           console.log('finally Added', this["list"+this.targetList])
+          // TODO запрос и обнуление стака
 
 
       }
@@ -379,14 +385,13 @@ export default defineComponent({
           console.log('Evt', this.list1)
           this["list"+this.sourceList].map((item, index) => {
               console.log('Item', item, index+1)
-              if(item.index !== index+1); item.sort=index+1
-
+              if(item.index !== index+1) {
+                  item.sort=index+1
+                }
           })
-
           console.log('finally Removed', this["list"+this.sourceList])
-
-
       }
+
       if(evt?.moved){
           console.log('Moved', evt)
           const oldIndex = evt.moved.oldIndex
@@ -395,9 +400,12 @@ export default defineComponent({
           console.log('Evt', this.list1)
           this["list"+this.sourceList].map((item, index) => {
               console.log('Item', item, index+1)
-              if(item.index !== index+1); item.sort=index+1
+              if(item.index !== index+1){
+                  item.sort=index+1
+                  this.stack.push(item.id)
+              }
+             //TODO запрос и обнусление стака
           })
-          // changeRange
           console.log('finally', this["list"+this.sourceList])
 
 
